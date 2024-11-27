@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Update Expense</h1>
+
+<form action="/update/{{ expense.id }}" method="post">
+    <label for="description">Description:</label>
+    <input type="text" name="description" id="description" value="{{ expense.description }}" required>
+
+    <label for="amount">Amount ($):</label>
+    <input type="number" name="amount" id="amount" step="0.01" value="{{ expense.amount }}" required>
+
+    <label for="date">Date:</label>
+    <input type="date" name="date" id="date" value="{{ expense.date }}" required>
+
+    <button type="submit">Update Expense</button>
+    <a href="/">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add New Expense</h1>
+
+<form action="/add" method="post">
+    <label for="description">Description:</label>
+    <input type="text" name="description" id="description" required>
+
+    <label for="amount">Amount ($):</label>
+    <input type="number" name="amount" id="amount" step="0.01" required>
+
+    <label for="date">Date:</label>
+    <input type="date" name="date" id="date" required>
+
+    <button type="submit">Add Expense</button>
+    <a href="/">Cancel</a>
+</form>
+{% endblock %}
