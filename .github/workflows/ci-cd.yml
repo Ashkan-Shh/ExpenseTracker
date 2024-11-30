@@ -13,21 +13,6 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: test_db
-        options: >-
-          --health-cmd "pg_isready -U user -d test_db"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -35,19 +20,21 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12
+          python-version: 3.11
 
       - name: Install dependencies
         run: |
+          cd ExpenseTracker
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run Tests
         run: |
-          pytest
+          cd ExpenseTracker
+          pytest test_main.py
 
   docker-build:
-    name: Build Docker Image
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
     needs: test
 
@@ -63,6 +50,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
+          cd ExpenseTracker
           docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest
 
@@ -75,4 +63,4 @@ jobs:
       - name: Deploy to Server (Placeholder)
         run: |
           echo "Deploying the application..."
-          # Add your deployment commands here (e.g., SSH to the server and restart)
+          # Add deployment commands here (e.g., SSH to the server, or use a cloud provider CLI)
